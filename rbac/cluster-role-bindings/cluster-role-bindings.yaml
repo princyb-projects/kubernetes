@@ -1,0 +1,44 @@
+---
+# Bind platform-admin ClusterRole to the platform-admins group and service account.
+# Members of this group have cluster-wide administrative access.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: platform-admin-binding
+  labels:
+    rbac-tier: cluster
+subjects:
+  # Platform administrators group (e.g., managed via your IdP/SSO)
+  - kind: Group
+    name: platform-admins
+    apiGroup: rbac.authorization.k8s.io
+  # Example individual user:
+  # - kind: User
+  #   name: cluster-admin@example.com
+  #   apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: platform-admin
+  apiGroup: rbac.authorization.k8s.io
+---
+# Bind cluster-viewer ClusterRole to the cluster-viewers group.
+# Members of this group have read-only access across all namespaces.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: cluster-viewer-binding
+  labels:
+    rbac-tier: cluster
+subjects:
+  # Monitoring / audit group
+  - kind: Group
+    name: cluster-viewers
+    apiGroup: rbac.authorization.k8s.io
+  # Example: grant monitoring service account cluster-wide read access
+  # - kind: ServiceAccount
+  #   name: monitoring-agent
+  #   namespace: monitoring
+roleRef:
+  kind: ClusterRole
+  name: cluster-viewer
+  apiGroup: rbac.authorization.k8s.io

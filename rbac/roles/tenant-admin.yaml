@@ -1,0 +1,61 @@
+# tenant-admin ClusterRole
+# Grants full control over all standard workload resources within a tenant namespace.
+# Intended for tenant administrators managing their own namespace.
+# Applied via a namespace-scoped RoleBinding (not a ClusterRoleBinding) so permissions
+# are confined to the bound namespace only.
+#
+# Security notes:
+#   - pods/exec is intentionally excluded to prevent arbitrary code execution inside pods.
+#   - RBAC Role/RoleBinding management is intentionally excluded; namespace RBAC is
+#     managed by the platform team via platform-admin to prevent privilege escalation.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: tenant-admin
+  labels:
+    rbac-tier: tenant
+rules:
+  # Full control over core workload resources
+  - apiGroups: [""]
+    resources:
+      - pods
+      - pods/log
+      - services
+      - endpoints
+      - configmaps
+      - secrets
+      - persistentvolumeclaims
+      - serviceaccounts
+      - events
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  # Full control over apps workloads
+  - apiGroups: ["apps"]
+    resources:
+      - deployments
+      - replicasets
+      - statefulsets
+      - daemonsets
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  # Manage horizontal pod autoscalers
+  - apiGroups: ["autoscaling"]
+    resources:
+      - horizontalpodautoscalers
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  # Manage batch jobs
+  - apiGroups: ["batch"]
+    resources:
+      - jobs
+      - cronjobs
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  # Manage ingress and network policies
+  - apiGroups: ["networking.k8s.io"]
+    resources:
+      - ingresses
+      - networkpolicies
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  # Read resource quotas and limit ranges (managed by platform team)
+  - apiGroups: [""]
+    resources:
+      - resourcequotas
+      - limitranges
+    verbs: ["get", "list", "watch"]

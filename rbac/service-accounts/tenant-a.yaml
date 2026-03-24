@@ -1,0 +1,30 @@
+---
+# ServiceAccount for tenant-a administrators
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tenant-a-admin
+  namespace: tenant-a
+  labels:
+    tenant: tenant-a
+    role: admin
+---
+# ServiceAccount for tenant-a developers
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tenant-a-developer
+  namespace: tenant-a
+  labels:
+    tenant: tenant-a
+    role: developer
+---
+# ServiceAccount for tenant-a viewers
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tenant-a-viewer
+  namespace: tenant-a
+  labels:
+    tenant: tenant-a
+    role: viewer
