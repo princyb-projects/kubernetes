@@ -1,0 +1,64 @@
+---
+# Bind tenant-admin Role to tenant-b-admin ServiceAccount
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: tenant-b-admin-binding
+  namespace: tenant-b
+  labels:
+    tenant: tenant-b
+subjects:
+  - kind: ServiceAccount
+    name: tenant-b-admin
+    namespace: tenant-b
+  # Add human users or groups here as needed, e.g.:
+  # - kind: User
+  #   name: bob@example.com
+  #   apiGroup: rbac.authorization.k8s.io
+  # - kind: Group
+  #   name: tenant-b-admins
+  #   apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: tenant-admin
+  apiGroup: rbac.authorization.k8s.io
+---
+# Bind tenant-developer Role to tenant-b-developer ServiceAccount
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: tenant-b-developer-binding
+  namespace: tenant-b
+  labels:
+    tenant: tenant-b
+subjects:
+  - kind: ServiceAccount
+    name: tenant-b-developer
+    namespace: tenant-b
+  # - kind: Group
+  #   name: tenant-b-developers
+  #   apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: tenant-developer
+  apiGroup: rbac.authorization.k8s.io
+---
+# Bind tenant-viewer Role to tenant-b-viewer ServiceAccount
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: tenant-b-viewer-binding
+  namespace: tenant-b
+  labels:
+    tenant: tenant-b
+subjects:
+  - kind: ServiceAccount
+    name: tenant-b-viewer
+    namespace: tenant-b
+  # - kind: Group
+  #   name: tenant-b-viewers
+  #   apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: tenant-viewer
+  apiGroup: rbac.authorization.k8s.io
